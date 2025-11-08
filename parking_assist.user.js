@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         停车场手动放行辅助用户脚本
 // @namespace    https://example.com/parking-assist
-// @version      1.0.1
+// @version      1.0.2
 // @description  在页面上读取车牌并根据本地任务进行提醒，含任务管理浮窗。
 // @match        http://10.0.0.1:8080/webpark/*
 // @match        https://10.0.0.1:8080/webpark/*
@@ -431,7 +431,10 @@
   }
 
   function extractPlateFromText(raw) {
-    const str = String(raw || '').replace(/\u00A0|&nbsp;/g, ' ');
+    const str = String(raw || '').replace(/\u00A0|&nbsp;/g, ' ').trim();
+    if (str === '无牌车') {
+        return '无牌车';
+    }
     // 移除所有空白和分隔符后再匹配，以支持 `粤 B 12345` 这样的格式
     const cleanStr = str.toUpperCase().replace(/[\s-]/g, '');
     const PLATE_RE = /[一-龥][A-Z][A-Z0-9]{5,6}/;
